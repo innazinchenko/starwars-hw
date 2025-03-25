@@ -1,30 +1,27 @@
+import {useEffect, useState} from "react";
+import {base_url} from "./constants.js";
+
+
 const Text = () => {
+    const [openingCrawl, setOpeningCrawl] = useState('Loading...');
+
+    useEffect(() => {
+        const episode = Math.floor(Math.random() * 6 + 1);
+        fetch(`${base_url}/v1/films/${episode}`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Something went wrong!`);
+                }
+                return res.json();
+            })
+            .then(data => setOpeningCrawl(data.opening_crawl))
+            .catch(e => setOpeningCrawl(e.message));
+    }, [])
+
     return (
-        <div>
             <p className="farGalaxy">
-                It is a period of civil war.
-                Rebel spaceships, striking
-                from a hidden base, have won
-                their first victory against
-                the evil Galactic Empire.
-
-                During the battle, Rebel
-                spies managed to steal secret
-                plans to the Empire's
-                ultimate weapon, the DEATH
-                STAR, an armored space
-                station with enough power
-                to destroy an entire planet.
-
-                Pursued by the Empire's
-                sinister agents, Princess
-                Leia races home aboard her
-                starship, custodian of the
-                stolen plans that can save her
-                people and restore
-                freedom to the galaxy....
+                {openingCrawl}
             </p>
-        </div>
     );
 };
 
