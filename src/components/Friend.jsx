@@ -9,11 +9,8 @@ const Friend = ({picture, pos}) => {
         styles += " bottomRight";
     }
 
-
     return (
-        <div>
             <img className={styles} src={picture} alt="Friend"/>
-        </div>
     );
 };
 
