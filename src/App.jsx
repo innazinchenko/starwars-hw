@@ -16,8 +16,8 @@ function App() {
           }}>
           <Header/>
           <Main />
-          </SwContext.Provider>
           <Footer/>
+          </SwContext.Provider>
       </div>
   )
 }
