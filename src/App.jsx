@@ -11,13 +11,13 @@ function App() {
 
   return (
       <div className={'container-fluid'}>
-          <SwContext.Provider value={{
+          <SwContext value={{
               page, changePage: setPage
           }}>
           <Header/>
-          <Main />
+          <Main/>
+          </SwContext>
           <Footer/>
-          </SwContext.Provider>
       </div>
   )
 }

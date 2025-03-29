@@ -6,10 +6,18 @@ const AboutMe = () => {
     const [mainHero, setMainHero] = useState('Loading...');
 
     useEffect(() => {
+        const localStorageData = localStorage.getItem('localStorageData');
+        if (localStorageData) {
+            setMainHero(localStorageData);
+        } else {
 
-        fetch(`${base_url}/v1/peoples/1`)
-            .then(res => res.json())
-            .then(data => setMainHero(data))
+            fetch(`${base_url}/v1/peoples/1`)
+                .then(res => res.json())
+                .then(data => {
+                    setMainHero(data);
+                    localStorage.setItem('localStorageData', JSON.stringify(data));
+                })
+        }
     }, [])
     return (
         <div>
