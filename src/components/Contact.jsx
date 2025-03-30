@@ -2,29 +2,49 @@ import '../Contact.css'
 import {useEffect, useState} from "react";
 import {base_url} from "./constants.js";
 
-
+const lsPlanets = "planets_data";
 const Contact = () => {
     const [planets, setPlanets] = useState(['Loading..']);
 
-        async function fetchPlanets() {
+
+    const anyDataYet = (timestamp) => {
+        const now = new Date().getTime();
+        const difference = now - timestamp;
+        return difference > 30 * 24 * 60 * 60 * 1000;
+    };
+
+
+    async function fetchPlanets() {
             const response = await fetch(`${base_url}/v1/planets/`);
             const data = await response.json();
             const planets = data.map(item => item.name);
             setPlanets(planets);
+
+
+        localStorage.setItem(lsPlanets, JSON.stringify({
+            planets: planets,
+            timestamp: new Date().getTime()
+        }
+        ));
+
         }
 
 
-        useEffect(() => {
-            const lsPlanets = localStorage.getItem('lsPlanets');
-            if (lsPlanets) {
-                setPlanets(lsPlanets)
-            } else {
-                fetchPlanets()
-                    .then(data =>{
-                        localStorage.setItem('lsPlanets', JSON.stringify(data));
-                    })
+    useEffect(() => {
+
+
+        const storedPlanets = localStorage.getItem(lsPlanets);
+        if (storedPlanets) {
+            const parsedPlanets = JSON.parse(storedPlanets);
+            if (!anyDataYet(parsedPlanets.timestamp)) {
+                setPlanets(parsedPlanets.planets);
+                return;
             }
-        },[]);
+        }
+
+        fetchPlanets();
+        return () => console.log('Component Contact was unmounted');
+    }, []);
 
 
         return (

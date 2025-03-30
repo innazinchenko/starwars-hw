@@ -8,14 +8,17 @@ const AboutMe = () => {
     useEffect(() => {
         const localStorageData = localStorage.getItem('localStorageData');
         if (localStorageData) {
-            setMainHero(localStorageData);
+            const {data, timestamp} = JSON.parse(localStorageData);
+            if (Date.now() - timestamp < (30 * 24 * 60 * 60 * 1000)) {
+            setMainHero(data);
+            }
         } else {
 
             fetch(`${base_url}/v1/peoples/1`)
                 .then(res => res.json())
                 .then(data => {
                     setMainHero(data);
-                    localStorage.setItem('localStorageData', JSON.stringify(data));
+                    localStorage.setItem('localStorageData', JSON.stringify({data, timestamp: Date.now()}));
                 })
         }
     }, [])
